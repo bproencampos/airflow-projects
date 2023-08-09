@@ -1,0 +1,29 @@
+
+=========== Glossary ===========
+DAG - Directed Acyclic Graph
+
+=========== Commands ===========
+airflow -h for descriptions (airflow list_dags -h)
+airflow list_dags to show all reconized DAGs
+airflow webserver -p 9090
+
+=========== Running Airflow on Ubuntu WSL2 ==========
+
+pip install apache-airflow
+airflow db init
+airflow webserver -p 8080
+airflow scheduler
+
+http://localhost:8080
+
+========== Stop Airflow ===========
+systemctl stop airflow
+
+or in cases more severe
+sudo lsof -i tcp:8080
+kill -9 PID_number
+rm airflow-webserver.pid
+
+=========== Copying a file from Windows to Ubuntu WSL2 ==========
+sudo ls /mnt/c/Documents\ and\ Settings/bruno/Documents/GitHub/airflow-projects
+sudo cp /mnt/c/Documents\ and\ Settings/bruno/Documents/GitHub/airflow-projects/rocket_launches_page22/download_rockets_launches.py .
