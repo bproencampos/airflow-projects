@@ -1,0 +1,49 @@
+===== UPLOAD CSV FILE TO S3 BUCKET USING PYTHON LAMBDA ======
+import os
+import requests
+import boto3
+
+def lambda_handler(event, context):
+    # Defina as informações do arquivo CSV no GitHub
+    github_user = 'seu_usuario'
+    github_repo = 'seu_repositorio'
+    github_file_path = 'caminho/do/arquivo.csv'
+
+    # URL do arquivo CSV no GitHub
+    github_url = f'https://raw.githubusercontent.com/{github_user}/{github_repo}/main/{github_file_path}'
+
+    # Nome do arquivo no S3
+    s3_bucket = 'seu_bucket'
+    s3_key = 'pasta/no/s3/arquivo.csv'
+
+    # Crie um cliente S3
+    s3 = boto3.client('s3')
+
+    try:
+        # Faça o download do arquivo CSV do GitHub
+        response = requests.get(github_url)
+        if response.status_code == 200:
+            # Carregue o conteúdo do arquivo CSV para o S3
+            s3.put_object(Bucket=s3_bucket, Key=s3_key, Body=response.text)
+            return {
+                'statusCode': 200,
+                'body': 'Arquivo CSV carregado com sucesso no S3.'
+            }
+        else:
+            return {
+                'statusCode': response.status_code,
+                'body': 'Erro ao fazer o download do arquivo CSV do GitHub.'
+            }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': str(e)
+        }
+		
+===== IMPORT DE OUTRAS DEPENDENCIAS NO LAMBDA ======
+pip install virtualenv
+virtualenv lambda_env
+source lambda_env/bin/activate  # Ative o ambiente virtual
+pip install requests -t /caminho/do/seu/diretorio/de/destino
+cd /caminho/do/seu/diretorio/de/destino
+zip -r lambda_package.zip .

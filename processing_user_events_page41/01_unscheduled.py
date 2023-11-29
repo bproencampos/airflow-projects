@@ -8,7 +8,7 @@ from airflow.operators.python import PythonOperator
 
 dag = DAG(
     dag_id="01_unscheduled",
-    start_date=dt.datetime(2019, 1, 1), # Define the start date for the DAG
+    start_date=dt.datetime(2023, 10, 3), # Define the start date for the DAG
     schedule_interval=None, # Specify that this is an unscheduled DAG
 )
 

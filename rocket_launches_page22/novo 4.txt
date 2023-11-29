@@ -1,0 +1,40 @@
+import json
+import boto3
+import pymysql
+
+def lambda_handler(event, context):
+    s3_client = boto3.client('s3')
+    rds_host = 'database-1.czoi0d5bgvz4.sa-east-1.rds.amazonaws.com'
+    username = 'admin'
+    password = 'New*3382'
+    database_name = 'dbteste'
+    
+    try:
+        
+        # Conexao RDS
+        conn = pymysql.connect(host=rds_host, user=username, password=password, database=database_name)
+        cursor = conn.cursor()
+        
+        # Criacao da tabela no RDS MySQL com a estrutura desejada
+        create_table_query = """
+        CREATE TABLE tbl_teste (
+            id INT NOT NULL,
+            title VARCHAR(255),
+            revenue FLOAT,
+            budget FLOAT,
+            release_date VARCHAR(15),
+            vote_count int,
+            lucro FLOAT,
+            PRIMARY KEY (id)
+        );
+        """
+        cursor.execute(create_table_query)
+    
+    except Exception as e:
+        print(f'Erro: {e}')
+        raise e
+
+    return {
+        'statusCode': 200,
+        'body': 'Transferência para o RDS concluída com sucesso'
+    }
